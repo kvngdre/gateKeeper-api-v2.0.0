@@ -5,5 +5,6 @@
   "ext": "ts",
   "env": {
     "NODE_ENV": "development"
-  }
+  },
+  "exec": "node"
 }
