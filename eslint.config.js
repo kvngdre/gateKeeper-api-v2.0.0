@@ -4,6 +4,7 @@ import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
 import importPlugin from "eslint-plugin-import";
+import promisePlugin from "eslint-plugin-promise";
 
 export default [
   { files: ["**/*.{js,mjs,cjs,ts}"] },
@@ -14,7 +15,8 @@ export default [
   {
     plugins: {
       prettier: prettierPlugin,
-      import: importPlugin
+      import: importPlugin,
+      promise: promisePlugin
     }
   },
   {
