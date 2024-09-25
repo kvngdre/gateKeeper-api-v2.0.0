@@ -1,22 +1,30 @@
 import globals from "globals";
-import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
+
+import path from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
+import pluginJs from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
 import importPlugin from "eslint-plugin-import";
-import promisePlugin from "eslint-plugin-promise";
+
+// mimic CommonJS variables -- not needed if using CommonJS
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: pluginJs.configs.recommended
+});
 
 export default [
-  { files: ["**/*.{js,mjs,cjs,ts}"] },
-  { languageOptions: { globals: globals.node, sourceType: "module" } },
-  pluginJs.configs.recommended,
+  { languageOptions: { globals: globals.node } },
+  // ...compat.extends("standard-with-typescript"),
   ...tseslint.configs.recommended,
-  { ignores: ["node_modules", "dist"] },
   {
     plugins: {
       prettier: prettierPlugin,
-      import: importPlugin,
-      promise: promisePlugin
+      import: importPlugin
     }
   },
   {
