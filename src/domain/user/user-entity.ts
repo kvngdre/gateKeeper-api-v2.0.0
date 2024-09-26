@@ -1,5 +1,5 @@
-import { DomainEntity } from "src/shared-kernel/domain-entity.js";
 import { Column, Entity } from "typeorm";
+import { DomainEntity } from "src/shared-kernel/domain-entity.js";
 
 @Entity("users")
 export class User extends DomainEntity {

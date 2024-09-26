@@ -1,36 +1,36 @@
 import globals from "globals";
 import tseslint from "typescript-eslint";
-
-import path from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
 import pluginJs from "@eslint/js";
-import prettier from "eslint-config-prettier";
-import prettierPlugin from "eslint-plugin-prettier";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import importPlugin from "eslint-plugin-import";
-
-// mimic CommonJS variables -- not needed if using CommonJS
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: pluginJs.configs.recommended
-});
+import pluginPromise from "eslint-plugin-promise/index.js";
 
 export default [
-  { languageOptions: { globals: globals.node } },
-  // ...compat.extends("standard-with-typescript"),
-  ...tseslint.configs.recommended,
   {
-    plugins: {
-      prettier: prettierPlugin,
-      import: importPlugin
+    languageOptions: {
+      globals: globals.node,
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: "module"
+      }
     }
   },
+  { linterOptions: { reportUnusedDisableDirectives: "warn" } },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
+  { files: ["src/**/*.{ts,js}"] },
+  { ignores: ["node_modules/**/*", "dist/**/*", "coverage/**/*", "eslint.config.js"] },
+  {
+    plugins: {
+      "@typescript-eslint": tseslint.plugin
+    }
+  },
+  importPlugin.flatConfigs.recommended,
+  pluginPromise.configs["flat/recommended"],
+  eslintPluginPrettierRecommended,
   {
     rules: {
-      ...prettier.rules,
-      "prettier/prettier": "error",
       "@typescript-eslint/consistent-type-definitions": "error",
       "no-unused-vars": ["off", { args: "all", argsIgnorePattern: "^_" }],
       "@typescript-eslint/no-unused-vars": ["off", { args: "all", argsIgnorePattern: "^_" }],
@@ -44,6 +44,19 @@ export default [
           ]
         }
       ]
+    }
+  },
+  {
+    settings: {
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts"]
+      },
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: ["./tsconfig.json"]
+        }
+      }
     }
   }
 ];
