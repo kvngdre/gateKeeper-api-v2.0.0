@@ -3,38 +3,29 @@ import { DomainEntity } from "src/shared-kernel/domain-entity.js";
 
 @Entity("users")
 export class User extends DomainEntity {
-  @Column()
+  @Column({ unique: true })
   public email: string;
 
-  // @Column()
-  // public hashedPassword: string;
-
-  @Column()
+  @Column({ unique: true })
   public username: string;
 
-  @Column({
-    name: "is_admin"
-  })
-  public isAdmin: boolean = false;
+  @Column({ name: "hashed_password", nullable: true })
+  public hashedPassword: string | null = null;
 
-  @Column()
-  public role: string;
+  @Column({ name: "oauth_id", nullable: true })
+  public oauthId: string | null = null;
 
-  // @Column({
-  //   name: "oauth_id"
-  // })
-  // public oauthId: string;
+  @Column({ name: "oauth_provider", nullable: true })
+  public oauthProvider: string | null = null;
 
-  // @Column({
-  //   name: "oauth_provider"
-  // })
-  // public oauthProvider: string;
+  @Column({ name: "role_id" })
+  public roleId: string;
 
-  constructor(email: string, username: string, role: string) {
+  constructor(email: string, username: string, roleId: string) {
     super();
 
     this.email = email;
     this.username = username;
-    this.role = role;
+    this.roleId = roleId;
   }
 }

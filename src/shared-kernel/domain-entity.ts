@@ -1,4 +1,4 @@
-import { Column, PrimaryColumn } from "typeorm";
+import { Column, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { ulid } from "ulid";
 
 export abstract class DomainEntity {
@@ -12,7 +12,7 @@ export abstract class DomainEntity {
   })
   public createdAt: Date = new Date();
 
-  @Column({
+  @UpdateDateColumn({
     name: "updated_at"
   })
   public updatedAt: Date = new Date();
